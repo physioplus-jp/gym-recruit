@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[ジム名] 採用特設サイト | AIコンシェルジュ付</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .hero-gradient {
+            background: linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.9)), 
+                        url('https://images.unsplash.com/photo-1593079831268-3381b0ad4a7a?auto=format&fit=crop&q=80&w=800');
+            background-size: cover;
+            background-position: center;
+        }
+        .chat-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .chat-container.open {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 pb-24">
+    <!-- 1. ヘッダー -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div class="px-5 py-4 flex justify-between items-center max-w-md mx-auto">
+            <div class="font-bold text-xl text-slate-800 tracking-tight flex items-center gap-2">
+                <span class="bg-emerald-600 text-white w-8 h-8 flex items-center justify-center rounded-lg text-sm">CG</span>
+                RECRUIT
+            </div>
+            <a href="#contact" class="bg-emerald-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-md">エントリー</a>
+        </div>
+    </header>
+
+    <!-- 2. ヒーローセクション -->
+    <section class="relative h-[60vh] flex items-center justify-center hero-gradient text-white text-center px-6">
+        <div class="relative z-10">
+            <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest border border-emerald-500/30">JOIN OUR TEAM</span>
+            <h1 class="text-4xl font-black mt-6 leading-tight">「鍛える」のその先へ。</h1>
+            <p class="text-lg mt-4 opacity-90">一生モノのカラダを、共にデザインしませんか？</p>
+            <div class="mt-10 space-y-3">
+                <button onclick="toggleChat()" class="block w-full bg-white text-slate-900 py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-emerald-600"></i> AIに質問してみる
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Window (Hidden by default) -->
+    <div id="chatBox" class="fixed bottom-24 right-4 left-4 z-50 pointer-events-none">
+        <div class="max-w-md mx-auto pointer-events-auto">
+            <div id="chatWindow" class="chat-container bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col">
+                <div class="p-4 border-b border-slate-100 bg-emerald-50 rounded-t-3xl flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white">
+                            <i data-lucide="bot" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-slate-800 text-sm">採用コンシェルジュAI</span>
+                    </div>
+                    <button onclick="toggleChat()" class="text-slate-400 hover:text-slate-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div id="chatMessages" class="p-4 h-64 overflow-y-auto space-y-4 text-sm scroll-smooth">
+                    <div class="bg-slate-100 p-3 rounded-2xl rounded-tl-none mr-8">
+                        こんにちは！[ジム名]の採用について、気になることは何でも聞いてください。
+                    </div>
+                </div>
+                <div class="p-4 border-t border-slate-100 flex gap-2 bg-white rounded-b-3xl">
+                    <input type="text" id="userInput" placeholder="働き方や研修について..." class="flex-1 bg-slate-50 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <button onclick="handleSend()" id="sendBtn" class="bg-emerald-600 text-white p-2 rounded-xl active:scale-90 transition-transform">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ミッションセクション -->
+    <section id="vision" class="px-6 py-16 bg-white">
+        <div class="max-w-md mx-auto">
+            <h2 class="text-xl font-bold mb-6 border-l-4 border-emerald-500 pl-4">私たちのミッション</h2>
+            <p class="text-slate-600 leading-relaxed mb-6 text-sm">
+                解剖学・生理学に基づいた「コンディショニング」を通じて、お客様の人生をより豊かにすることを目指しています。
+            </p>
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                <p class="font-bold text-slate-800 italic text-sm leading-relaxed">
+                    「なぜ、その動きが必要なのか？」を言語化し、お客様に一生モノの財産（健康）を届ける。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 募集要項 -->
+    <section id="info" class="px-6 py-16 bg-slate-50">
+        <div class="max-w-md mx-auto">
+            <h2 class="text-xl font-bold mb-8 text-center text-slate-800 tracking-tight">募集要項</h2>
+            <div class="space-y-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200">
+                    <div class="text-emerald-600 text-[10px] font-black uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <i data-lucide="briefcase" class="w-3 h-3"></i> 募集職種
+                    </div>
+                    <div class="text-slate-800 font-bold">コンディショニングトレーナー</div>
+                    <p class="text-xs text-slate-500 mt-2">理学療法士、アスレティックトレーナー等の資格保持者歓迎。</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200">
+                    <div class="text-emerald-600 text-[10px] font-black uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <i data-lucide="banknote" class="w-3 h-3"></i> 給与
+                    </div>
+                    <div class="text-slate-800 font-bold">月給 250,000円 〜</div>
+                    <p class="text-xs text-slate-500 mt-2">経験・能力を考慮。インセンティブ制度あり。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. コンタクトボタン（固定） -->
+    <div id="contact" class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-lg border-t border-slate-200 z-50">
+        <div class="max-w-md mx-auto flex gap-3">
+            <a href="mailto:example@gym.com" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-bold text-center text-sm shadow-lg active:scale-95 transition-transform">
+                WEBから応募する
+            </a>
+            <a href="https://line.me/..." class="w-16 bg-[#06C755] text-white py-4 rounded-2xl font-bold flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+                <i data-lucide="message-circle" class="w-6 h-6"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Gemini API Configuration
+        const apiKey = ""; // 実行環境から提供されます
+        const systemPrompt = `
+            あなたは「コンディショニングジム [ジム名]」の採用コンシェルジュです。
+            求職者からの質問に、プロフェッショナルかつ温かみのあるトーンで回答してください。
+            【ジムの特徴】
+            ・科学的根拠（解剖学、生理学）に基づいた指導
+            ・単なる筋トレではなく、体を整えることを重視
+            ・理学療法士などの専門家が在籍
+            ・研修制度が充実しており、一生モノのスキルが身につく
+            【回答ルール】
+            ・常に敬語で話す
+            ・回答は短く（150文字以内）まとめる
+            ・募集要項（月給25万〜、トレーナー職、駅近）に基づいて答える
+            ・詳細が不明な場合は「カジュアル面談で詳しくお伝えします」と誘導する
+        `;
+
+        function toggleChat() {
+            const window = document.getElementById('chatWindow');
+            window.classList.toggle('open');
+            if (window.classList.contains('open')) {
+                document.getElementById('userInput').focus();
+            }
+        }
+
+        async function handleSend() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+            
+            const loadingMsg = addMessage('AIが回答を作成中...', 'ai', true);
+
+            try {
+                const response = await fetchGemini(message);
+                loadingMsg.remove();
+                addMessage(response, 'ai');
+            } catch (error) {
+                loadingMsg.remove();
+                addMessage('申し訳ありません。現在接続が不安定です。時間をおいて再度お試しいただくか、LINEからお問い合わせください。', 'ai');
+            }
+        }
+
+        async function fetchGemini(prompt, retries = 0) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (retries < 5) {
+                        const delay = Math.pow(2, retries) * 1000;
+                        await new Promise(res => setTimeout(res, delay));
+                        return fetchGemini(prompt, retries + 1);
+                    }
+                    throw new Error('API Error');
+                }
+
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "すみません、うまく答えられませんでした。";
+            } catch (error) {
+                if (retries < 5) {
+                    const delay = Math.pow(2, retries) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                    return fetchGemini(prompt, retries + 1);
+                }
+                throw error;
+            }
+        }
+
+        function addMessage(text, sender, isLoading = false) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = sender === 'user' 
+                ? 'bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none ml-8 text-right self-end'
+                : 'bg-slate-100 text-slate-800 p-3 rounded-2xl rounded-tl-none mr-8';
+            if (isLoading) div.classList.add('animate-pulse');
+            div.innerText = text;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return div;
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+    </script>
+</body>
+</html>
